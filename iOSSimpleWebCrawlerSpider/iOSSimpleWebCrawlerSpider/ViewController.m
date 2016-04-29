@@ -66,7 +66,7 @@
     
     addConstraint(self.view, @"H:|-padding-[_urlTextField]-padding-|", rows);
     // addConstraint(self.view, @"H:|-padding-[_searchedTextField]-padding-|", rows);
-    addConstraint(self.view, @"H:|-padding-[_searchedTextField(>=135)]-5-[_maxResultsTextField]-5-[_maxDeepTextField]-5-[_maxFlowTextField]-padding-|", rows);
+    addConstraint(self.view, @"H:|-padding-[_searchedTextField(>=115)]-5-[_maxResultsTextField]-5-[_maxDeepTextField(==_maxResultsTextField)]-5-[_maxFlowTextField(==_maxResultsTextField)]-padding-|", rows);
     addConstraint(self.view, @"H:|-padding-[_goButton(>=_stopButton)]-5-[_pauseButton(==_stopButton)]-5-[_resumeButton(==_stopButton)]-5-[_stopButton]-padding-|", rows);
     addConstraint(self.view, @"H:|-padding-[_infoLabel]-padding-|", rows);
         addConstraint(self.view, @"H:|-padding-[_tableView]-padding-|", rows);
