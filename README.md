@@ -1,5 +1,8 @@
 # iOSSimpleWebCrawlerSpider
 
+
+
+
 GOOGLE TRANSLATION of russian source: https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/README-ru.md
 
 
@@ -33,4 +36,6 @@ Queue / finished, the number of occurrences of the text or error userfriendly
 The application consists of one screen. The upper part contains controls.
 Screen Design on the applicant's discretion.
 
+
+(https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider0-6.jpg?raw=true)|(https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider1-6.jpg?raw=true)
 
