@@ -37,5 +37,5 @@ The application consists of one screen. The upper part contains controls.
 Screen Design on the applicant's discretion.
 
 
-(https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider0-6.jpg?raw=true)|(https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider1-6.jpg?raw=true)
+![img1](https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider0-6.jpg?raw=true)|![img2](https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/ios-spider1-6.jpg?raw=true)
 
