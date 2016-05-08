@@ -10,6 +10,7 @@
 #import "MSVSimpleWebCrawlerSpiderModel.h"
 #import "MSVSimpleWebCrawlerSpiderLevel.h"
 #import "MSVSimpleWebCrawlerSpiderDone.h"
+#import "MSVSimpleWebCrawlerSpiderLoader.h"
 
 @interface MSVSimpleWebCrawlerSpiderLevelManager()
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
@@ -53,6 +54,7 @@
     NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
         [[MSVSimpleWebCrawlerSpiderModel sharedModel] performSelectorOnMainThread:@selector(doneLevels) withObject:nil waitUntilDone:NO];
         // [[MSVSimpleWebCrawlerSpiderModel sharedModel] doneLevels];
+        [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = 0;
     }];
     if (operationOld)
         [operation addDependency:operationOld];

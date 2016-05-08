@@ -104,7 +104,7 @@
             _goButton.enabled = NO;
             _pauseButton.enabled = YES;
             _resumeButton.enabled = NO;
-            _stopButton.enabled = NO;
+            _stopButton.enabled = YES;
             break;
 
         case MSVSimpleWebCrawlerSpiderCurrentStatusSuspended:

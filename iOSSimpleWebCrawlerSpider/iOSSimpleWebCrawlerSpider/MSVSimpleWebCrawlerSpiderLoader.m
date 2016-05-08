@@ -9,7 +9,8 @@
 #import "MSVSimpleWebCrawlerSpiderLoader.h"
 
 @interface MSVSimpleWebCrawlerSpiderLoader()
-@property (nonatomic, strong) NSOperationQueue *operationQueue;
+@property (nonatomic, weak) NSOperationQueue *operationQueue;
+@property (nonatomic, weak) NSURLSession* session;
 @end
 
 
@@ -30,7 +31,8 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _operationQueue = [[NSOperationQueue alloc] init];
+        _session = [NSURLSession sharedSession];
+        _operationQueue = _session.delegateQueue;
         _operationQueue.maxConcurrentOperationCount = 3;
     }
     return self;
@@ -38,16 +40,11 @@
 
 - (void)addRequest:(NSURLRequest *)request withHandler:(MSVSimpleWebCrawlerSpiderLoaderHandler)requestHandler
 {
-    NSBlockOperation *operation = [NSBlockOperation blockOperationWithBlock:^{
-        
-        NSURLSession *session = [NSURLSession sharedSession];
-        NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+        NSURLSessionDataTask *task = [_session dataTaskWithRequest:request
                                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                     requestHandler(response, data, error);
                                                 }];
         [task resume];
-    }];
-    [_operationQueue addOperation:operation];
 }
 
 @end

@@ -12,7 +12,7 @@
 
 @property (nonatomic, weak) NSOperationQueue *operationQueue;
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, assign) int requestsCount;
+@property (nonatomic, assign) NSUInteger requestsCount;
 
 - (void)runLevel:(int)level;
 

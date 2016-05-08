@@ -24,13 +24,13 @@
     for (MSVSimpleWebCrawlerSpiderItem* item in items)
     {
         
-        while (weakSelf.requestsCount >= [MSVSimpleWebCrawlerSpiderModel sharedModel].searchSettings.maxFlow)
-            [NSThread sleepForTimeInterval:0.1];
+//        while (weakSelf.requestsCount >= [MSVSimpleWebCrawlerSpiderModel sharedModel].searchSettings.maxFlow)
+//            [NSThread sleepForTimeInterval:0.1];
     
         __weak MSVSimpleWebCrawlerSpiderItem* itemWeak = item;
         
         // NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:item.urlString]];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:item.urlString] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:5]; // 5 sec for page
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:item.urlString] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:15]; // 5 sec for page
         
         [[MSVSimpleWebCrawlerSpiderLoader sharedLoader] addRequest:request withHandler:^(NSURLResponse *response, NSData *data, NSError *error)
         {
@@ -43,7 +43,8 @@
                 NSString* htmlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 // 1
                 NSArray* components = [htmlString componentsSeparatedByString:searchedString];
-                itemWeak.numberResult = (int)components.count;
+                // NSLog(@"%lu, %lu", (unsigned long)htmlString.length, (unsigned long)((NSString *)(components[0])).length);
+                itemWeak.numberResult = (int)components.count - 1;
                 if (itemWeak.numberResult > 0)
                 {
                     itemWeak.status = MSVSimpleWebCrawlerSpiderItemStatusFound;
@@ -62,6 +63,8 @@
                 if (htmlString)
                     arrayOfAllMatches = [regex matchesInString:htmlString options:0 range:NSMakeRange(0, [htmlString length])];
                 
+                // NSLog(@"arrayOfAllMatches.count: %lu", (unsigned long)arrayOfAllMatches.count);
+                
                 for (NSTextCheckingResult *match in arrayOfAllMatches) {
                     if (match == nil)
                         continue;
@@ -78,50 +81,46 @@
                         {
                             newUrl = [NSURL URLWithString:substringForMatch relativeToURL:[NSURL URLWithString:itemWeak.urlString] ].absoluteString;
                         }
+                        
                         [[MSVSimpleWebCrawlerSpiderModel sharedModel] appendItemWithURLString:newUrl level:level + 1];
                     }
-                    
-                    // NSLog(@"Extracted URL: %@",substringForMatch);
-                    // NSLog(@"%@, %d", newUrl, itemWeak.numberResult);
+
                     
                     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                        
                         if ([_delegate respondsToSelector:@selector(newItem)])
                             [_delegate performSelectorOnMainThread:@selector(newItem) withObject:nil waitUntilDone:NO];
                     }];
-                    
                 }
-
             }
             
-            if (--_requestsCount == 0)
+            --_requestsCount;
+            if (_requestsCount == 0)
+            {
                 weakSelf.operationQueue.suspended = NO;
+                [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = 0;
+            }
             
-            [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = _requestsCount;
-            
+            //
+            [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = (int)[[MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.operations count]; // _requestsCount;
             [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.viewCount++;
 
-            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                
+            // [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                 if ([_delegate respondsToSelector:@selector(downloadedItem)])
                     [_delegate performSelectorOnMainThread:@selector(downloadedItem) withObject:nil waitUntilDone:NO];
-            }];
+            // }];
 
         }];
         
         _requestsCount++;
-        [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = _requestsCount;
+        //
+        [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = (int)[[MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.operations count]; // _requestsCount;
     }
 
     if (items.count > 0)
         self.operationQueue.suspended = YES;
 }
 
-
 // <a[^>]+href=\"(.*?)\"[^>]*>.*?</a>
 // @"http?://([-\\w\\.]+)+(:\\d+)?(/([\\w/_\\.]*(\\?\\S+)?)?)?"
-         
-
-
 
 @end

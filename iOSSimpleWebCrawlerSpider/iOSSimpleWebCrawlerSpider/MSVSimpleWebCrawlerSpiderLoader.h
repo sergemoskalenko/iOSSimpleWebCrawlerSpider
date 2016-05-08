@@ -12,7 +12,8 @@ typedef void (^MSVSimpleWebCrawlerSpiderLoaderHandler)(NSURLResponse *response, 
 
 @interface MSVSimpleWebCrawlerSpiderLoader : NSObject
 
-@property (nonatomic, strong, readonly) NSOperationQueue *operationQueue;
+@property (nonatomic, weak, readonly) NSOperationQueue *operationQueue;
+@property (nonatomic, weak, readonly) NSURLSession* session;
 
 + (instancetype)sharedLoader;
 - (void)addRequest:(NSURLRequest *)request withHandler:(MSVSimpleWebCrawlerSpiderLoaderHandler)requestHandler;

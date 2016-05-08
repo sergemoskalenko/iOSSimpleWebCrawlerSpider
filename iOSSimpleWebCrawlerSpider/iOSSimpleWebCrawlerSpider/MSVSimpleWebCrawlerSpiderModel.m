@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSMutableDictionary* itemsDic;
 @property (nonatomic, strong) NSMutableArray* items;
 @property (nonatomic, strong) MSVSimpleWebCrawlerSpiderLevelManager* levelManager;
+@property (nonatomic, assign) BOOL levelOperationSuspended;
 
 @end
 
@@ -102,6 +103,8 @@
     if (_currentStatus == MSVSimpleWebCrawlerSpiderCurrentStatusNone || _currentStatus == MSVSimpleWebCrawlerSpiderCurrentStatusStopped || _currentStatus == MSVSimpleWebCrawlerSpiderCurrentStatusDone )
     {
      
+        [MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.maxConcurrentOperationCount = self.searchSettings.maxFlow;
+        
         self.currentInfo.viewCount = 0;
         self.currentInfo.foundCount = 0;
         
@@ -122,6 +125,7 @@
 - (void)pause
 {
     [MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.suspended = YES;
+    _levelOperationSuspended = _levelManager.operationQueue.suspended;
     _levelManager.operationQueue.suspended = YES;
     
     self.currentStatus = MSVSimpleWebCrawlerSpiderCurrentStatusSuspended;
@@ -130,8 +134,10 @@
 
 - (void)resume
 {
+    [MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.maxConcurrentOperationCount = self.searchSettings.maxFlow;
+    
     [MSVSimpleWebCrawlerSpiderLoader sharedLoader].operationQueue.suspended = NO;
-    _levelManager.operationQueue.suspended = NO;
+    _levelManager.operationQueue.suspended = _levelOperationSuspended;
     
     self.currentStatus = MSVSimpleWebCrawlerSpiderCurrentStatusInWork;
 
@@ -149,7 +155,9 @@
 
 - (void)doneLevels
 {
+    [MSVSimpleWebCrawlerSpiderModel sharedModel].currentInfo.flowCount = 0;
     self.currentStatus = MSVSimpleWebCrawlerSpiderCurrentStatusDone;
+    [_delegate performSelectorOnMainThread:@selector(downloadedItem) withObject:nil waitUntilDone:NO];
 }
 
 #pragma mark -
