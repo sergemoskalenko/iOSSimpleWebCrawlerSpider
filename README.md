@@ -3,6 +3,9 @@
 GOOGLE TRANSLATION of russian source: https://github.com/sergemoskalenko/iOSSimpleWebCrawlerSpider/blob/master/README-ru.md
 
 
+**iOS Simple Web Crawler Spider** run online in your web browser
+https://appetize.io/app/wp4ttu0gh0u9cqgdz4rmkmkn18
+
 Application iOS - Web Spider
 
 The goal - recursive search for the specified text starting with the specified page on the Internet.
