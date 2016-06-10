@@ -1,5 +1,8 @@
 # iOSSimpleWebCrawlerSpider
 
+**iOS Simple Web Crawler Spider** запустить online в web browser 
+https://appetize.io/app/wp4ttu0gh0u9cqgdz4rmkmkn18
+
 Приложение iOS – Web Spider
 
 Цель – рекурсивный поиск заданного текста начиная с заданной страницы в Internet.
